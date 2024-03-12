@@ -18,5 +18,6 @@ const userSchema= new mongoose.Schema({
 },{
     timestamps:true
 });
-const users=mongoose.model('user',userSchema);
+//tells this schema is for which table in mongodb
+const users=mongoose.model('users',userSchema);
 module.exports=users;

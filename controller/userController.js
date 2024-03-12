@@ -1,7 +1,19 @@
+const { response } = require('express');
 const User=require('../models/user');
 
 module.exports.profile=function(req,res){
-    return res.render('user_profile',{title:"ProfilePage"});
+    console.log("COOKIES",req.cookies);
+    
+        User.findById(req.cookies.user_id).then((user)=>
+       { console.log("USER IS ",user);
+        if(user)
+       { 
+        return res.render('user_profile',{title:"ProfilePage", user:user});
+       }
+       else{return res.redirect("/users/signin")}
+       }).catch((err)=>console.log("Error finding user with this id"))
+    
+    
 }
 module.exports.signin=function(req,res){
     return res.render('user_sign_in',{title:"SignInPage"});
@@ -17,7 +29,7 @@ module.exports.create=function(req,res){
     }
     console.log("After pwd match")
     User.findOne({email:req.body.email})
-    .then((user)=>{if(!user)
+    .then((user)=>{console.log('USER DETAILS',user); if(!user)
         {
             User.create(req.body);
             return res.redirect('/users/signin');
@@ -38,6 +50,38 @@ module.exports.create=function(req,res){
     //     }
     // })
 }
+//to move to profile page after signin
 module.exports.createsession=function(req,res){
-   // return res.render('user_sign_up',{title:"SignUpPage"});
+    //steps to authenticate
+   // find user with e-mail
+    User.findOne({email:req.body.name}).then((user)=>{
+        console.log('USER:',user);
+        if(user)
+        {
+            if( user.password!=req.body.password)
+             {
+                console.log("PWD NOT MATCH");
+                return response.redirect('back');
+                 
+             }
+             else{
+                res.cookie('user_id',user._id);
+                return res.redirect('/users/profile');
+             }
+         }
+        else {
+            console.log("User dont exist ");
+            return response.redirect('back')
+            }
+
+}).catch((err)=>{console.log(err); return})
+   //handle user found:match password
+
+   //handle pwd not match
+
+   //handle session creation
+
+   //handle user not found
+
+
 }

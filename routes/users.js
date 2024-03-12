@@ -6,5 +6,6 @@ router.get('/profile',userController.profile);
 router.get('/signin',userController.signin);
 router.get('/signup',userController.signup);
 router.post('/create',userController.create);
+router.post('/create-session',userController.createsession);
 
 module.exports=router;

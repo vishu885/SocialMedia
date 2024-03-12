@@ -8,6 +8,7 @@ const cookieparser=require('cookie-parser');
 //to use static file like css,js
 app.use(express.static('./assets'));
 app.use(express.urlencoded());
+app.use(cookieparser());
 //to make use of layouts
 app.use(expressLayouts);
 //to extract style and script from sub pages to head in layout
